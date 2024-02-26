@@ -1,3 +1,9 @@
+<?php
+    session_start();
+    require_once("../conexion/conexion.php");
+    $db = new Database();
+    $con =$db->conectar();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,7 +42,7 @@
 					</span>
                     <form class="col-4 p-3" method="post">
 
-					<div class="wrap-input100 validate-input" data-validate = "ID prestamo	">
+					<div class="wrap-input100">
 						<input class="input100" type="text" name="id_prestamo" id="id_prestamo" placeholder="id_prestamo" readonly>
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">

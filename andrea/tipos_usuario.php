@@ -1,23 +1,8 @@
 <?php
-// Archivo de conexión a la base de datos
-include 'conexion/conexion.php';
-
-// Verificar si se ha enviado el formulario
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Obtener el valor del campo 'tp_usuarios' del formulario
-    $id_tipo_usuario = $_POST['id_tipo_usuario'];
-    $tipo_usuario = $_POST['tipo_usuario'];
-
-    // Preparar la consulta SQL para insertar un nuevo registro en la tabla 'roles'
-     $sql = "INSERT INTO tipos_usuarios (id_tipo_usuario, tipo_usuario) VALUES ($id_tipo_usuario,'$tipo_usuario')";
-
-    // Ejecutar la consulta SQL
-    if ($conn->query($sql) === TRUE) {
-        echo "Nuevo tipo de usuaurio insertado correctamente.";
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-}
+    session_start();
+    require_once("../conexion/conexion.php");
+    $db = new Database();
+    $con =$db->conectar();
 ?>
 <!DOCTYPE html>
 <html lang="en">
