@@ -1,18 +1,36 @@
 <?php
 
-$conexion = mysqli_connect("localhost", "root", "", "rh");
+class Database
+{
+  
+    private $hostname = "localhost";
+  
+    private $database = "rh";
+  
+    private $username = "root";
+  
+    private $password = "";
+  
+    private $charset = "utf8";
 
-if ($conexion) {
-    echo '
-    <script>
-        alert("usted se a conectado a la base de dadtos de app");
-    </script>
-        ';
-} else {
-    echo '
-    <script>
-        alert(" no tamos activos papi");
-    </script>
-        ';
+
+function conectar()
+{
+    try{
+        $conexion = "mysql:host=". $this-> hostname. ";dbname=". $this-> database. ";charset=". $this->charset;
+        $option=[
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_EMULATE_PREPARES => false
+        ];
+        $pdo = new PDO($conexion, $this->username, $this->password, $option);
+
+        return $pdo;
+    }
+    catch(PDOException $e)
+    {
+        echo 'Error de conexion: ' . $e->getmessage();
+        exit;
+    }
 }
+} 
 ?>
