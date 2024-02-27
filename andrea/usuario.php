@@ -24,12 +24,12 @@
     
       if($id_usuario=="" || $nombre=="" || $id_tipo_cargo=="" || $id_estado=="" || $correo=="" || $contrasena=="" || $nit_empresa=="")
       {
-        echo '<script>alert ("EXISTEN DATOS VACIOS"); </script>';
-        echo '<script>window.location="usuarios.php"</script>';
+        echo '<script>alert ("EXISTEN CAMPOS VACIOS"); </script>';
+        echo '<script>window.location="usuario.php"</script>';
       }
       else if($fila){
-        echo '<script>alert ("USUARIO O TELEFONO YA REGISTRADO"); </script>';
-        echo '<script>window.location="usuarios.php"</script>';
+        echo '<script>alert ("USUARIO YA REGISTRADO"); </script>';
+        echo '<script>window.location="usuario.php"</script>';
       }
 
             
@@ -39,8 +39,8 @@
         $insertSQL = $con->prepare ("INSERT INTO usuario(id_usuario,nombre,id_tipo_cargo,id_estado,correo,id_tipo_usuario,contrasena,nit_empresa) 
         VALUES ('$id_usuario','$nombre', '$id_tipo_cargo', '$id_estado', '$correo', '$id_tipo_usuario', '$contrasena','$nit_empresa')");
         $insertSQL->execute();
-        echo '<script>alert ("registro exitoso"); </script>';
-        echo '<script>window.location="usuarios.php"</script>';
+        echo '<script>alert ("Usuario Creado con Exito"); </script>';
+        echo '<script>window.location="usuario.php"</script>';
       }
     }
 
@@ -100,6 +100,10 @@
 					</div>
 
 					<div class="wrap-input100 validate-input">
+					<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-envelope" aria-hidden="true"></i>
+						</span>
 					<select class="input100" name="id_tipo_cargo">
 							<?php
 							$control = $con->prepare("SELECT * FROM tipo_cargo");
@@ -112,6 +116,10 @@
 					</div>
 
 					<div class="wrap-input100 validate-input">
+					<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-envelope" aria-hidden="true"></i>
+						</span>
 					<select class="input100" name="id_estado">
 							<?php
 							$control = $con->prepare("SELECT * FROM estado where id_estado <= 5");
@@ -135,6 +143,10 @@
 					</div>
 
 					<div class="wrap-input100 validate-input">
+					<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-envelope" aria-hidden="true"></i>
+						</span>
 					<select class="input100" name="id_tipo_usuario">
 							<?php
 							$control = $con->prepare("SELECT * FROM tipos_usuarios");
@@ -164,22 +176,38 @@
 					</div>
 					
 					<div class="container-login100-form-btn">
-					<input type="submit" name="validar" value="Registrar">
+					<input class="login100-form-btn" type="submit" name="validar" value="Registrar">
 					<input type="hidden" name="MM_insert" value="formreg">
 					</div>
 
 					<div class="text-center p-t-12">
 						<span class="txt1">
-							Forgot
+							
 						</span>
-						<a class="txt2" href="#">
-							Username / Password?
+						<a class="txt2" href="admin.php">
+							Volver
 						</a>
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
+	<!--===============================================================================================-->	
+	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/bootstrap/js/popper.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/tilt/tilt.jquery.min.js"></script>
+	<script >
+		$('.js-tilt').tilt({
+			scale: 1.1
+		})
+	</script>
+<!--===============================================================================================-->
+	<script src="js/main.js"></script>
 	
 	
 
