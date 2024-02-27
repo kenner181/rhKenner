@@ -126,10 +126,10 @@
 
 					<div class="text-center p-t-12">
 						<span class="txt1">
-							Forgot
+							
 						</span>
-						<a class="txt2" href="#">
-							Username / Password?
+						<a class="txt2" href="admin.php">
+							Volver
 						</a>
 					</div>
 				</form>
