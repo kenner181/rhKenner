@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-02-2024 a las 13:09:22
+-- Tiempo de generación: 27-02-2024 a las 13:45:07
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.2.0
 
@@ -29,8 +29,20 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `arl` (
   `id_arl` int(10) NOT NULL,
-  `tipo` varchar(30) DEFAULT NULL
+  `tipo` varchar(30) DEFAULT NULL,
+  `cotizacion` decimal(10,3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `arl`
+--
+
+INSERT INTO `arl` (`id_arl`, `tipo`, `cotizacion`) VALUES
+(1, 'Riesgo mínimo', '0.522'),
+(2, 'Riesgo bajo', '1.044'),
+(3, 'Riesgo medio	', '2.436'),
+(4, 'Riesgo alto', '4.350'),
+(5, 'Riesgo máximo', '6.960');
 
 -- --------------------------------------------------------
 
@@ -40,8 +52,15 @@ CREATE TABLE `arl` (
 
 CREATE TABLE `auxtransporte` (
   `id_auxtransporte` int(10) NOT NULL,
-  `valor` decimal(10,2) DEFAULT NULL
+  `valor` decimal(10,3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `auxtransporte`
+--
+
+INSERT INTO `auxtransporte` (`id_auxtransporte`, `valor`) VALUES
+(1, '162.000');
 
 -- --------------------------------------------------------
 
@@ -66,6 +85,18 @@ CREATE TABLE `estado` (
   `id_estado` int(10) NOT NULL,
   `estado` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `estado`
+--
+
+INSERT INTO `estado` (`id_estado`, `estado`) VALUES
+(1, 'Activo'),
+(5, 'Inactivo'),
+(6, 'En proceso'),
+(10, 'Validado'),
+(11, 'Aprobado'),
+(15, 'En espera');
 
 -- --------------------------------------------------------
 
@@ -103,8 +134,8 @@ CREATE TABLE `ingresos` (
 
 CREATE TABLE `licencia` (
   `id_licencia` int(10) NOT NULL,
-  `serial` varchar(150) NOT NULL,
-  `id_estado` int(10) NOT NULL,
+  `nit_empresa` int(10) NOT NULL,
+  `licencia` varchar(50) NOT NULL,
   `fecha_inicio` datetime NOT NULL,
   `fecha_final` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -136,7 +167,7 @@ CREATE TABLE `solic_prestamo` (
   `id_usuario` int(10) NOT NULL,
   `monto_solicitado` decimal(10,2) DEFAULT NULL,
   `id_estado` int(10) NOT NULL,
-  `valor_cuostas` decimal(10,2) DEFAULT NULL,
+  `valor_cuotas` decimal(10,2) DEFAULT NULL,
   `cant_cuotas` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -160,9 +191,16 @@ CREATE TABLE `tipos_usuarios` (
 CREATE TABLE `tipo_cargo` (
   `id_tipo_cargo` int(10) NOT NULL,
   `cargo` varchar(30) DEFAULT NULL,
-  `salario_base` decimal(10,2) DEFAULT NULL,
+  `salario_base` decimal(10,0) DEFAULT NULL,
   `id_arl` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tipo_cargo`
+--
+
+INSERT INTO `tipo_cargo` (`id_tipo_cargo`, `cargo`, `salario_base`, `id_arl`) VALUES
+(6, 'Docente', '1358000', 1);
 
 -- --------------------------------------------------------
 
@@ -174,6 +212,14 @@ CREATE TABLE `tipo_permiso` (
   `id_tipo_permiso` int(10) NOT NULL,
   `tipo_permiso` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tipo_permiso`
+--
+
+INSERT INTO `tipo_permiso` (`id_tipo_permiso`, `tipo_permiso`) VALUES
+(1, 'Calamidad domestica'),
+(2, 'licencia de embarazo');
 
 -- --------------------------------------------------------
 
@@ -187,9 +233,16 @@ CREATE TABLE `tram_permiso` (
   `id_tipo_permiso` int(10) NOT NULL,
   `fecha_inicio` date DEFAULT NULL,
   `fecha_fin` date DEFAULT NULL,
-  `estado` varchar(50) DEFAULT NULL,
+  `estado` varchar(50) NOT NULL,
   `incapacidad` blob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tram_permiso`
+--
+
+INSERT INTO `tram_permiso` (`id_permiso`, `id_usuario`, `id_tipo_permiso`, `fecha_inicio`, `fecha_fin`, `estado`, `incapacidad`) VALUES
+(1, 123123, 1, '2024-02-26', '2024-02-27', '', 0x796f796f796f);
 
 -- --------------------------------------------------------
 
@@ -323,13 +376,13 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `arl`
 --
 ALTER TABLE `arl`
-  MODIFY `id_arl` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_arl` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `auxtransporte`
 --
 ALTER TABLE `auxtransporte`
-  MODIFY `id_auxtransporte` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_auxtransporte` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `gastos`
@@ -365,19 +418,19 @@ ALTER TABLE `tipos_usuarios`
 -- AUTO_INCREMENT de la tabla `tipo_cargo`
 --
 ALTER TABLE `tipo_cargo`
-  MODIFY `id_tipo_cargo` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_tipo_cargo` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_permiso`
 --
 ALTER TABLE `tipo_permiso`
-  MODIFY `id_tipo_permiso` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_tipo_permiso` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `tram_permiso`
 --
 ALTER TABLE `tram_permiso`
-  MODIFY `id_permiso` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_permiso` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `triggers`
