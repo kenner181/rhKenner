@@ -1,42 +1,47 @@
 <?php
+session_start();
+require_once("../conexion/conexion.php");
+$db = new Database();
+$con = $db->conectar();
+?>
+<?php
+if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "formreg")) {
 
-class Database
-{
+	$nit = $_POST['nit'];
+	$nombre = $_POST['nombre'];
+	$correo = $_POST['correo'];
 
-	private $hostname = "localhost";
+	$sql = $con -> prepare ("SELECT * FROM empresas");
+	$sql -> execute();
+	$fila = $sql -> fetchAll(PDO::FETCH_ASSOC);
 
-	private $database = "rh";
-
-	private $username = "root";
-
-	private $password = "";
-
-	private $charset = "utf8";
-
-
-	function conectar()
+	if($nit=="" || $nombre=="" || $correo=="")
 	{
-		try {
-			$conexion = "mysql:host=" . $this->hostname . ";dbname=" . $this->database . ";charset=" . $this->charset;
-			$option = [
-				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-				PDO::ATTR_EMULATE_PREPARES => false
-			];
-			$pdo = new PDO($conexion, $this->username, $this->password, $option);
-
-			return $pdo;
-		} catch (PDOException $e) {
-			echo 'Error de conexion: ' . $e->getmessage();
-			exit;
-		}
+		echo '<script>alert ("EXISTEN DATOS VACIOS"); </script>';
+	}
+	else
+	{
+	  $insertSQL = $con->prepare ("INSERT INTO empresas(nit_empresa, nombre, correo) 
+	  VALUES ('$nit','$nombre', '$correo')");
+	  $insertSQL->execute();
+	  echo '<script>alert ("Empresa creada con exito"); </script>';
+	  echo '<script>window.location="empresas.php"</script>';
 	}
 }
 ?>
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-	<title> Empresas</title>
+	<title>Empresas</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -134,28 +139,27 @@ class Database
 <body>
 	<div class="container-login100" style="background-image: url('img/rh1.jpg');">
 		<div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30">
-			<form class="login100-form validate-form">
+			<form class="login100-form validate-form" method="post">
 				<span class="login100-form-title p-b-37">
 					Crear Empresas
 				</span>
 				<div class="wrap-input100 validate-input m-b-20" data-validate="nit">
-					<input class="input100" type="text" name="nit" placeholder="NIT" id="nit">
+					<input class="input100" type="text" name="nit" id="nit" placeholder="NIT" id="nit">
 					<span class="focus-input100"></span>
 				</div>
 				<div class="wrap-input100 validate-input m-b-25" data-validate="nombre">
-					<input class="input100" type="text" name="nombre" placeholder="Nombre Empresa" id="nombre">
+					<input class="input100" type="text" name="nombre" id="nombre" placeholder="Nombre Empresa" id="nombre">
 					<span class="focus-input100"></span>
 				</div>
 				<div class="wrap-input100 validate-input m-b-25" data-validate="correo">
-					<input class="input100" type="text" name="correo" placeholder="Correo Electronico" id="correo">
+					<input class="input100" type="text" name="correo" id="correo" placeholder="Correo Electronico" id="correo">
 					<span class="focus-input100"></span>
 				</div>
 				<br>
 
 				<div class="container-login100-form-btn">
-					<button class="login100-form-btn">
-						Crear
-					</button>
+					<input type="submit" name="validar" value="Registrar" class="login100-form-btn">
+					<input type="hidden" name="MM_insert" value="formreg">
 				</div>
 				<div class="text-center">
 				</div>
