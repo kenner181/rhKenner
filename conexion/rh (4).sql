@@ -71,7 +71,6 @@ INSERT INTO `auxtransporte` (`id_auxtransporte`, `valor`) VALUES
 CREATE TABLE `empresas` (
   `nit_empresa` int(10) NOT NULL,
   `nombre` varchar(80) NOT NULL,
-  `id_licencia` int(10) NOT NULL,
   `correo` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -133,9 +132,8 @@ CREATE TABLE `ingresos` (
 --
 
 CREATE TABLE `licencia` (
-  `id_licencia` int(10) NOT NULL,
+  `id_licencia` varchar(40) NOT NULL,
   `nit_empresa` int(10) NOT NULL,
-  `licencia` varchar(50) NOT NULL,
   `fecha_inicio` datetime NOT NULL,
   `fecha_final` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

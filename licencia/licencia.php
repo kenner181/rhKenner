@@ -15,23 +15,23 @@ $fin = date("Y-m-d", strtotime($f_hoy . "+ 1 year"));
 
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "formreg")) {
 
-    
+
     $licencia = $_POST['licencia'];
     $fecha_inicio = $_POST['fechainicio'];
     $fecha_final = $_POST['fechafin'];
     $empresa = $_POST['empresa'];
 
-    $sql = $con->prepare("SELECT * FROM licencia, empresas");
+    $sql = $con->prepare("SELECT * FROM licencia");
     $sql->execute();
     $fila = $sql->fetchAll(PDO::FETCH_ASSOC);
 
     if ($licencia == "" || $fecha_inicio == "" || $fecha_final == "" || $empresa == "") {
         echo '<script>alert ("EXISTEN DATOS VACIOS"); </script>';
     } else {
-        $insertSQL = $con->prepare("INSERT INTO licencia( serial, fecha_inicio, fecha_final) 
-	  VALUES ('$licencia','$fecha_inicio', '$fecha_final')");
-        $insertSQL->execute();
-        echo '<script>alert ("Empresa creada con exito"); </script>';
+        $insertSQL = $con->prepare ("INSERT INTO licencia(id_licencia, nit_empresa, fecha_inicio, fecha_final) 
+	  VALUES ('$licencia','$empresa', '$fecha_inicio', 'fecha_final')");
+	  $insertSQL->execute();
+        echo '<script>alert ("Licencia creada con exito"); </script>';
         echo '<script>window.location="empresas.php"</script>';
     }
 }
@@ -166,16 +166,16 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "formreg")) {
                     $control = $con->prepare("SELECT * FROM empresas");
                     $control->execute();
                     while ($fila = $control->fetch(PDO::FETCH_ASSOC)) {
-                        echo "<option value='" . $fila['nit_empresa'] . "'>" . $fila['nombre'] . "</option>";
+                        echo "<option value='" . $fila['nit_empresa'] . "'>" . $fila['nit_empresa'] . "</option>";
                     }
                     ?>
                 </select>
                 <br>
 
                 <div class="container-login100-form-btn">
-					<input type="submit" name="validar" value="Registrar" class="login100-form-btn">
-					<input type="hidden" name="MM_insert" value="formreg">
-				</div>
+                    <input type="submit" name="validar" value="Registrar" class="login100-form-btn">
+                    <input type="hidden" name="MM_insert" value="formreg">
+                </div>
                 <div class="text-center">
                 </div>
             </form>
