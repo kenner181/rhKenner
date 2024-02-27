@@ -4,6 +4,32 @@
     $db = new Database();
     $con =$db->conectar();
 ?>
+<?php
+    if ((isset($_POST["MM_insert"]))&&($_POST["MM_insert"]=="formreg"))
+    {
+      $tipo_usuario = $_POST['tipo_usuario'];
+
+      $sql = $con -> prepare ("SELECT * FROM tipos_usuarios where tipo_usuario ='$tipo_usuario'");
+      $sql -> execute();
+      $fila = $sql -> fetchAll(PDO::FETCH_ASSOC);
+
+      if ($tipo_usuario=="")
+      {
+        echo '<script>alert ("EXISTEN DATOS VACIOS"); </script>';
+        echo '<script>window.location="tip_user.php"</script>';
+      }
+      else if($fila){
+        echo '<script>alert ("TIPO DE USUARIO YA REGISTRADO"); </script>';
+        echo '<script>window.location="tip_user.php"</script>';
+      } 
+      else{
+        $insertSQL = $con->prepare ("INSERT INTO tipos_usuarios(tipo_usuario) VALUES ('$tipo_usuario')");
+        $insertSQL->execute();
+        echo '<script>alert ("registro exitoso"); </script>';
+        echo '<script>window.location="tip_user.php"</script>';
+      }
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,11 +62,10 @@
 					<img src="images/img-01.png" alt="IMG">
 				</div>
 
-				<form class="login100-form validate-form">
+				<form class="login100-form validate-form" method="post">
 					<span class="login100-form-title">
 						Tipo Usuario
 					</span>
-                    <form action="tipo_usu.php" method="post">
 
 					<div class="wrap-input100">
 						<input class="input100" type="text" name="id_tipo_usuario" id="id_tipo_usuario" placeholder="id_tipo_usuario" readonly>
@@ -59,9 +84,8 @@
 					</div>
 					
 					<div class="container-login100-form-btn">
-						<button class="login100-form-btn">
-							Registrar
-						</button>
+					<input class="login100-form-btn" type="submit" name="validar" value="Registrar">
+					<input type="hidden" name="MM_insert" value="formreg">
 					</div>
 
 					<div class="text-center p-t-12">
