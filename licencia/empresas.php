@@ -30,13 +30,6 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "formreg")) {
 }
 ?>
 
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
