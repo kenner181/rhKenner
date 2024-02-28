@@ -1,40 +1,74 @@
 <?php
-session_start(); // Inicia la sesión
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "n_algj";
 
-// Verifica si el formulario de inicio de sesión se envió
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Conexión a la base de datos (debes ajustar estos valores según tu configuración)
-    $servername = "tu_servidor";
-    $username = "tu_usuario";
-    $password = "tu_contraseña";
-    $dbname = "tu_base_de_datos";
+try {
+    $conexion = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    // Establecer el modo de error PDO en excepción
+    $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Establecer el conjunto de caracteres a UTF-8
+    $conexion->exec("SET CHARACTER SET utf8");
 
-    // Crea la conexión
-    $conn = new mysqli($servername, $username, $password, $dbname);
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Verificar si se enviaron ambos campos: correo y contraseña
+        if (isset($_POST["ID"]) && isset($_POST["password"])) {
+            try {
+                // Escapar los valores para evitar inyección SQL
+                $ID = $_POST["ID"];
+                $password = $_POST["password"];
+                //$password = hash('sha512', $password);
 
-    // Verifica la conexión
-    if ($conn->connect_error) {
-        die("Conexión fallida: " . $conn->connect_error);
+
+                // Consulta SQL para obtener el tipo de usuario
+                $sql = "SELECT ID_Roll FROM usuarios WHERE ID = :ID AND password = :password";
+                $stmt = $conexion->prepare($sql);
+                $stmt->bindParam(":ID", $ID);
+                $stmt->bindParam(":password", $password);
+                $stmt->execute();
+
+                if ($stmt->rowCount() > 0) {
+                    // Obtener el tipo de usuario
+                    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $ID_Roll = $row["ID_Roll"];
+
+                    // Iniciar sesión y guardar el ID de usuario y el tipo de usuario en variables de sesión
+                    session_start();
+                    $_SESSION["ID"] = $ID;
+                    $_SESSION["ID_Roll"] = $ID_Roll;
+
+                    // Redireccionar según el tipo de usuario
+                    switch ($ID_Roll) {
+                        case 1:
+                            header("Location: index1.php");
+                            exit();
+                        case 2:
+                            header("Location: index2.php");
+                            exit();
+                        case 3:
+                            header("Location: index3.php");
+                            exit();
+                        default:
+                            // Manejar el caso en que el tipo de usuario no está definido
+                            echo '<script>alert("ID o contraseña incorrectos.");</script>';
+                            exit();
+                    }
+                } else {
+                    // Manejar el caso en que no se encontró ningún usuario
+                    echo '<script>alert("ID o contraseña incorrectos.");</script>';
+                    exit();
+                }
+            } catch (PDOException $e) {
+                // Manejar cualquier error de base de datos
+                echo "Error: " . $e->getMessage();
+            }
+        } else {
+            // Manejar el caso en que no se enviaron ambos campos
+            echo '<script>alert("No se puede iniciar sesión sin enviar datos.");</script>';
+            exit();
+        }
     }
-
-    // Obtiene los datos del formulario
-    $usuario = $_POST["usuario"];
-    $contrasena = $_POST["contrasena"];
-
-    // Consulta SQL para verificar el usuario y la contraseña
-    $sql = "SELECT * FROM usuarios WHERE nombre_usuario='$usuario' AND contrasena='$contrasena'";
-    $result = $conn->query($sql);
-
-    // Verifica si se encontró un usuario
-    if ($result->num_rows == 1) {
-        // Inicia la sesión y redirige al usuario a la página de inicio
-        $_SESSION["usuario"] = $usuario;
-        header("Location: pagina_de_inicio.php");
-    } else {
-        // Mensaje de error si no se encontró el usuario
-        $error_message = "Usuario o contraseña incorrectos";
-    }
-
-    // Cierra la conexión a la base de datos
-    $conn->close();
+} catch (PDOException $e) {
+    echo "Error de conexión a la base de datos: " . $e->getMessage();
 }
