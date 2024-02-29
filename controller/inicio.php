@@ -22,26 +22,26 @@ try {
 
 
                 // Consulta SQL para obtener el tipo de usuario
-                $sql = "SELECT ID_Roll FROM usuarios WHERE ID = :ID AND password = :password";
+                $sql = "SELECT id_tipo_usuario FROM usuario WHERE $ID = :id_usuario AND $password = :contrasena";
                 $stmt = $conexion->prepare($sql);
-                $stmt->bindParam(":ID", $ID);
-                $stmt->bindParam(":password", $password);
+                $stmt->bindParam(":id_usuario", $ID);
+                $stmt->bindParam(":contrasena", $password);
                 $stmt->execute();
 
                 if ($stmt->rowCount() > 0) {
                     // Obtener el tipo de usuario
                     $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                    $ID_Roll = $row["ID_Roll"];
+                    $ID_Roll = $row["id_tipo_usuario"];
 
                     // Iniciar sesión y guardar el ID de usuario y el tipo de usuario en variables de sesión
                     session_start();
-                    $_SESSION["ID"] = $ID;
-                    $_SESSION["ID_Roll"] = $ID_Roll;
+                    $_SESSION["id_usuario"] = $ID;
+                    $_SESSION["id_tipo_usuario"] = $ID_Roll;
 
                     // Redireccionar según el tipo de usuario
                     switch ($ID_Roll) {
                         case 1:
-                            header("Location: index1.php");
+                            header("Location: usuario.php");
                             exit();
                         case 2:
                             header("Location: index2.php");
