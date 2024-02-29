@@ -39,15 +39,12 @@
     <div class="container">
       <div class="row justify-content-center align-items-center vh-100">
         <div class="col-md-6">
-          <form action="tu_ruta_de_login" method="POST" class="login_form">
+          <form action="controller/inicio.php" method="POST" class="login_form">
             <div class="text-center">
               <h3>Login</h3>
             </div>
             <div class="form-group">
-              <input type="text" name="nitEmpresa" placeholder="Nit de la Empresa" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="text" name="cedula" placeholder="Cédula" class="form-control">
+              <input type="text" name="id_usuario" placeholder="Cédula" class="form-control">
             </div>
             <div class="form-group">
               <input type="password" name="contrasena" placeholder="Contraseña" class="form-control">

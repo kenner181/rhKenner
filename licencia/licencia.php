@@ -166,7 +166,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "formreg")) {
                     $control = $con->prepare("SELECT * FROM empresas");
                     $control->execute();
                     while ($fila = $control->fetch(PDO::FETCH_ASSOC)) {
-                        echo "<option value='" . $fila['nit_empresa'] . "'>" . $fila['nit_empresa'] . "</option>";
+                        echo "<option value='" . $fila['nit_empresa'] . "'>" . $fila['nombre'] . "</option>";
                     }
                     ?>
                 </select>

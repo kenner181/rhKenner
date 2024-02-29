@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "n_algj";
+$dbname = "rh";
 
 try {
     $conexion = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
@@ -13,11 +13,11 @@ try {
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Verificar si se enviaron ambos campos: correo y contraseña
-        if (isset($_POST["ID"]) && isset($_POST["password"])) {
+        if (isset($_POST["id_usuario"]) && isset($_POST["contrasena"])) {
             try {
                 // Escapar los valores para evitar inyección SQL
-                $ID = $_POST["ID"];
-                $password = $_POST["password"];
+                $ID = $_POST["id_usuario"];
+                $password = $_POST["contrasena"];
                 //$password = hash('sha512', $password);
 
 
