@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once("../controller/validarsesion.php");
 require_once("../conexion/conexion.php");
 $db = new Database();
 $con = $db->conectar();
@@ -15,23 +15,22 @@ $fin = date("Y-m-d", strtotime($f_hoy . "+ 1 year"));
 
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "formreg")) {
 
+    $id_licencia = $_POST['nit'];
+    $serial = $_POST['nombre'];
+    $fecha_inicio = $_POST['correo'];
+    $fecha_final = $_POST['correo'];
 
-    $licencia = $_POST['licencia'];
-    $fecha_inicio = $_POST['fechainicio'];
-    $fecha_final = $_POST['fechafin'];
-    $empresa = $_POST['empresa'];
-
-    $sql = $con->prepare("SELECT * FROM licencia");
+    $sql = $con->prepare("SELECT * FROM empresas");
     $sql->execute();
     $fila = $sql->fetchAll(PDO::FETCH_ASSOC);
 
-    if ($licencia == "" || $fecha_inicio == "" || $fecha_final == "" || $empresa == "") {
+    if ($nit == "" || $nombre == "" || $correo == "") {
         echo '<script>alert ("EXISTEN DATOS VACIOS"); </script>';
     } else {
-        $insertSQL = $con->prepare ("INSERT INTO licencia(id_licencia, nit_empresa, fecha_inicio, fecha_final) 
-	  VALUES ('$licencia','$empresa', '$fecha_inicio', 'fecha_final')");
-	  $insertSQL->execute();
-        echo '<script>alert ("Licencia creada con exito"); </script>';
+        $insertSQL = $con->prepare("INSERT INTO empresas(nit_empresa, nombre, correo) 
+	  VALUES ('$nit','$nombre', '$correo')");
+        $insertSQL->execute();
+        echo '<script>alert ("Empresa creada con exito"); </script>';
         echo '<script>window.location="empresas.php"</script>';
     }
 }
@@ -145,20 +144,20 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "formreg")) {
 <body>
     <div class="container-login100" style="background-image: url('img/rh1.jpg');">
         <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30">
-            <form class="login100-form validate-form" method="post">
+            <form class="login100-form validate-form">
                 <span class="login100-form-title p-b-37">
                     Crear Licencia
                 </span>
                 <div class="wrap-input100 validate-input m-b-20" data-validate="serial">
-                    <input class="input100" type="text" name="licencia" value="<?php echo $licencia ?>" id="licencia" readonly>
+                    <input class="input100" type="text" name="serial" placeholder="<?php echo $licencia ?>" id="serial" readonly>
                     <span class="focus-input100"></span>
                 </div>
                 <div class="wrap-input100 validate-input m-b-25" data-validate="fechainicio">
-                    <input class="input100" type="text" name="fechainicio" value="<?php echo $f_hoy ?>" id="fechainicio" readonly>
+                    <input class="input100" type="text" name="fechainicio" placeholder="<?php echo $f_hoy ?>" id="fechainicio" readonly>
                     <span class="focus-input100"></span>
                 </div>
                 <div class="wrap-input100 validate-input m-b-25" data-validate="fechafin">
-                    <input class="input100" type="text" name="fechafin" value="<?php echo $fin ?>" id="fechafin" readonly>
+                    <input class="input100" type="text" name="fechafin" placeholder="<?php echo $fin ?>" id="fechafin" readonly>
                     <span class="focus-input100"></span>
                 </div>
                 <select class="form-control custom-select" name="empresa" id="empresa" require>
@@ -173,8 +172,9 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "formreg")) {
                 <br>
 
                 <div class="container-login100-form-btn">
-                    <input type="submit" name="validar" value="Registrar" class="login100-form-btn">
-                    <input type="hidden" name="MM_insert" value="formreg">
+                    <button class="login100-form-btn">
+                        Crear
+                    </button>
                 </div>
                 <div class="text-center">
                 </div>
