@@ -1,9 +1,10 @@
 <?php
-session_start();
-require_once("./conexion/conexion.php");
+require_once("../controller/validarsesion.php");
+require_once("../conexion/conexion.php");
 $db = new Database();
 $con = $db->conectar();
-$sql = $con->prepare("SELECT * FROM tram_permiso,tipo_permiso,estado WHERE tram_permiso.id_tipo_permiso = tipo_permiso.id_tipo_permiso AND tram_permiso.id_estado = estado.id_estado ");
+$sql = $con->prepare("SELECT * FROM tram_permiso,tipo_permiso,estado WHERE tram_permiso.id_tipo_permiso = tipo_permiso.id_tipo_permiso 
+AND tram_permiso.id_estado = estado.id_estado ");
 $sql->execute();
 $resultado1 = $sql->fetchAll(PDO::FETCH_ASSOC);
 
@@ -47,7 +48,7 @@ $resultado1 = $sql->fetchAll(PDO::FETCH_ASSOC);
 
 <body>
 	<div class="container">
-	<a href="../admin/admin.php" class="btn btn-secondary mt-3"><i class="fas fa-arrow-left"></i> Regresar</a>
+		<a href="../admin/admin.php" class="btn btn-secondary mt-3"><i class="fas fa-arrow-left"></i> Regresar</a>
 		<div class="mx-auto col-sm-8 main-section" id="myTab" role="tablist">
 			<ul class="nav nav-tabs justify-content-end">
 				<li class="nav-item">
@@ -64,13 +65,13 @@ $resultado1 = $sql->fetchAll(PDO::FETCH_ASSOC);
 								<table id="userList" class="table table-bordered table-hover table-striped">
 									<thead class="thead-light">
 										<tr>
-                                            <th scope="col">Id Permiso</th>
+											<th scope="col">Id Permiso</th>
 											<th scope="col">Documento</th>
 											<th scope="col">Tipo Permiso</th>
 											<th scope="col">Fecha Inicio</th>
-                                            <th scope="col">Fecha Fin</th>
-                                            <th scope="col">Estado</th>
-                                            <th scope="col">Incapacidad</th>
+											<th scope="col">Fecha Fin</th>
+											<th scope="col">Estado</th>
+											<th scope="col">Incapacidad</th>
 											<th></th>
 										</tr>
 									</thead>
@@ -88,8 +89,8 @@ $resultado1 = $sql->fetchAll(PDO::FETCH_ASSOC);
 											<td> <?php echo $resul['id_usuario']; ?></td>
 											<td> <?php echo $resul['tipo_permiso']; ?></td>
 											<td> <?php echo $resul['fecha_inicio']; ?> </td>
-                                            <td> <?php echo $resul['fecha_fin']; ?> </td>
-                                            <td> <?php echo $resul['estado']; ?> </td>
+											<td> <?php echo $resul['fecha_fin']; ?> </td>
+											<td> <?php echo $resul['estado']; ?> </td>
 											<td> <?php echo $resul['incapacidad']; ?> </td>
 											<td>
 												<a href="?id=<?php echo $resul['id_permiso'] ?>" class="btn btn-primary" onclick="window.open('admin/update_tram.php?id=<?php echo $resul['id_permiso'] ?>','','width= 700,height=700, toolbar=NO');void(null);">

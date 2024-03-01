@@ -18,14 +18,14 @@ try {
                 // Escapar los valores para evitar inyección SQL
                 $ID = $_POST["id_usuario"];
                 $password = $_POST["contrasena"];
-                //$password = hash('sha512', $password);
+                $pass = password_hash($password, PASSWORD_DEFAULT);
 
 
                 // Consulta SQL para obtener el tipo de usuario
-                $sql = "SELECT id_tipo_usuario FROM usuario WHERE $ID = :id_usuario AND $password = :contrasena";
+                $sql = "SELECT id_usuario, contrasena, id_tipo_usuario FROM usuario WHERE id_usuario = :id_usuario";
                 $stmt = $conexion->prepare($sql);
                 $stmt->bindParam(":id_usuario", $ID);
-                $stmt->bindParam(":contrasena", $password);
+                
                 $stmt->execute();
 
                 if ($stmt->rowCount() > 0) {
@@ -41,7 +41,7 @@ try {
                     // Redireccionar según el tipo de usuario
                     switch ($ID_Roll) {
                         case 1:
-                            header("Location: preuba.html");
+                            header("Location: ../admin/admin.php");
                             exit();
                         case 2:
                             header("Location: index2.php");
