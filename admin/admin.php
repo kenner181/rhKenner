@@ -25,7 +25,7 @@ $con = $db->conectar();
 </head>
 <body>
 
-<?php include("sidebar/sidebar.php") ?>
+<?php include("sidebar.php") ?>
 
 <div id="groupedBarChartContainer">
     <canvas id="groupedBarChart"></canvas>

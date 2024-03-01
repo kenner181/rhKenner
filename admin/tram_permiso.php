@@ -76,7 +76,7 @@ if (isset($_POST["MM_insert"]) && ($_POST["MM_insert"] == "formreg")) {
 </head>
 
 <body>
-<?php include("sidebar/sidebar.php") ?>
+<?php include("sidebar.php") ?>
 
 	<div class="limiter">
 		<div class="container-login100">

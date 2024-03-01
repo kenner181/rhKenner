@@ -111,7 +111,6 @@ $resultado1 = $sql->fetchAll(PDO::FETCH_ASSOC);
 				</div>
 			</div>
 		</div>
-		<a href="../admin/cerrar.php" class="btn btn-primary mt-3"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
 	</div>
 </body>
 
