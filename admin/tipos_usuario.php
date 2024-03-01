@@ -1,5 +1,13 @@
 <?php
-    require_once("../controller/validarsesion.php");
+    session_start();
+
+	// Verificar si la sesión no está iniciada
+	if (!isset($_SESSION["id_usuario"])) {
+		// Mostrar un alert y redirigir utilizando JavaScript
+		echo '<script>alert("Debes iniciar sesión antes de acceder a la interfaz de administrador.");</script>';
+		echo '<script>window.location.href = "../login.html";</script>';
+		exit();
+	}
 	require_once("../conexion/conexion.php");
     $db = new Database();
     $con =$db->conectar();
