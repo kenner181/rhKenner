@@ -1,5 +1,4 @@
 <?php
-// Aquí deberías incluir tu código de conexión a la base de datos si es necesario
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -9,10 +8,17 @@ $conexion = mysqli_connect($servername, $username, $password, $dbname);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validar el correo electrónico enviado desde el formulario
+    $id_usuario = $_POST["id_user"];
     $email = $_POST["email"];
 
-    $query = "SELECT id_usuario FROM usuario WHERE correo = '$email'";
-    $result = mysqli_query($conexion, $query);
+    $query = "SELECT id_usuario, contraseña FROM usuario WHERE id_usuario = ? AND correo = ?";
+    
+    // Utilizar consultas preparadas para evitar inyecciones SQL
+    $stmt = mysqli_prepare($conexion, $query);
+    mysqli_stmt_bind_param($stmt, "ss", $id_usuario, $email);
+    mysqli_stmt_execute($stmt);
+    
+    $result = mysqli_stmt_get_result($stmt);
 
     if ($result) {
         // Verificar si se encontraron resultados
@@ -20,23 +26,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // El correo electrónico existe en la base de datos
             $fila = mysqli_fetch_assoc($result);
             $id = $fila['id_usuario'];
+            $contrasena = $fila['contraseña'];
 
-            // Generar un token único
-            $token = bin2hex(random_bytes(10));
-
-            // Guardar el token en la base de datos junto con el ID del usuario y la fecha de creación
-
-            // Enviar el correo electrónico con el enlace para restablecer la contraseña
-            $reset_link = "localhost/rhKenner/rec_contra/res_contra.php?token=$token";
+            // Enviar el correo electrónico con la contraseña para restablecer
             $subject = "Recuperación de Contraseña";
-            $message = "Hola,\n\nPara restablecer tu contraseña, por favor haz clic en el siguiente enlace:\n$reset_link";
-            $headers = "From: kenner.lc90@gmail.com" . "\r\n" .
+            $message = "Hola, Tu contraseña actual es: $contrasena\n\nPor favor, visita el siguiente enlace para actualizar tu contraseña: localhost/rhKenner/actualizar.php?id=$id";
+            $headers = "From: akacompany24@gmail.com" . "\r\n" .
                        "Reply-To: $email" . "\r\n" .
                        "X-Mailer: PHP/" . phpversion();
 
             // Envía el correo electrónico
             if (mail($email, $subject, $message, $headers)) {
-                echo "Se ha enviado un enlace de restablecimiento de contraseña a tu correo electrónico.";
+                echo '<script>alert("Revisa tu correo y sigue con la recuperación.");</script>';
+                echo '<script>window.location.href = "../actualizar.php";</script>';
             } else {
                 echo "Hubo un problema al enviar el correo electrónico. Por favor, inténtalo de nuevo más tarde.";
             }
@@ -49,4 +51,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 
