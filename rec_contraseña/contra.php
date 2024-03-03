@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_usuario = $_POST["id_user"];
     $email = $_POST["email"];
 
-    $query = "SELECT id_usuario, contraseña FROM usuario WHERE id_usuario = ? AND correo = ?";
+    $query = "SELECT id_usuario, contrasena FROM usuario WHERE id_usuario = ? AND correo = ?";
     
     // Utilizar consultas preparadas para evitar inyecciones SQL
     $stmt = mysqli_prepare($conexion, $query);
@@ -26,19 +26,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // El correo electrónico existe en la base de datos
             $fila = mysqli_fetch_assoc($result);
             $id = $fila['id_usuario'];
-            $contrasena = $fila['contraseña'];
+            $contrasena = $fila['contrasena'];
 
             // Enviar el correo electrónico con la contraseña para restablecer
             $subject = "Recuperación de Contraseña";
-            $message = "Hola, Tu contraseña actual es: $contrasena\n\nPor favor, visita el siguiente enlace para actualizar tu contraseña: localhost/rhKenner/actualizar.php?id=$id";
-            $headers = "From: akacompany24@gmail.com" . "\r\n" .
+            $message = "Hola, Tu contraseña actual es: $contrasena\n\n";
+            $headers = "From: kenner.lc90@gmail.com" . "\r\n" .
                        "Reply-To: $email" . "\r\n" .
                        "X-Mailer: PHP/" . phpversion();
 
             // Envía el correo electrónico
             if (mail($email, $subject, $message, $headers)) {
                 echo '<script>alert("Revisa tu correo y sigue con la recuperación.");</script>';
-                echo '<script>window.location.href = "../actualizar.php";</script>';
+                echo '<script>window.location.href = "res_contra.php";</script>';
             } else {
                 echo "Hubo un problema al enviar el correo electrónico. Por favor, inténtalo de nuevo más tarde.";
             }
